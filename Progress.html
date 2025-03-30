@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumeX Student Progress Dashboard</title>
+  <style>
+    :root {
+      --primary: #8a2be2;
+      --primary-light: #9d4edd;
+      --primary-dark: #6a0dad;
+      --secondary: #ff1493;
+      --background: #1a0033;
+      --card-bg: #2d0a4f;
+      --text: #ffffff;
+      --text-secondary: #e6e6e6;
+      --success: #00c896;
+      --warning: #ffb347;
+      --danger: #ff6b6b;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: var(--background);
+      color: var(--text);
+      padding: 20px;
+    }
+    
+    .dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo-icon {
+      background-color: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .header-text h1 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    
+    .header-text p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .countdown {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .countdown p {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .countdown h2 {
+      font-size: 28px;
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .grid-item {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .progress-container {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .progress-title {
+      font-size: 16px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .stat {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .stat-secondary {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+    }
+    
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .chart-container {
+      height: 300px;
+      position: relative;
+    }
+    
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+    }
+    
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    th {
+      color: var(--text-secondary);
+      font-weight: normal;
+      font-size: 14px;
+    }
+    
+    .score {
+      font-weight: bold;
+    }
+    
+    .score-positive {
+      color: var(--success);
+    }
+    
+    .score-warning {
+      color: var(--warning);
+    }
+    
+    .percentage {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: bold;
+    }
+    
+    .circle-chart {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+    }
+    
+    .circle-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.1);
+      stroke-width: 12;
+    }
+    
+    .circle {
+      fill: none;
+      stroke: url(#gradient);
+      stroke-width: 12;
+      stroke-linecap: round;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      stroke-dasharray: 283;
+    }
+    
+    .recommendations {
+      padding: 20px;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      margin-top: 30px;
+    }
+    
+    .recommendation-title {
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+    
+    .recommendation-list {
+      list-style: none;
+    }
+    
+    .recommendation-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .recommendation-item:last-child {
+      border-bottom: none;
+    }
+    
+    .recommendation-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+    
+    .recommendation-content {
+      flex: 1;
+    }
+    
+    .recommendation-content h4 {
+      margin-bottom: 5px;
+    }
+    
+    .recommendation-content p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    /* Line Graph Styles */
+    .line-chart {
+      height: 230px;
+      padding: 20px 40px 0;
+      position: relative;
+    }
+    
+    .chart-grid {
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      right: 40px;
+      bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .grid-line {
+      width: 100%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .line-plot {
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      right: 40px;
+      bottom: 30px;
+      z-index: 2;
+    }
+    
+    .line {
+      fill: none;
+      stroke: url(#line-gradient);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    
+    .data-point {
+      fill: var(--secondary);
+      stroke: var(--background);
+      stroke-width: 2;
+    }
+    
+    .x-axis {
+      position: absolute;
+      bottom: 0;
+      left: 40px;
+      right: 40px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .y-axis {
+      position: absolute;
+      top: 20px;
+      left: 0;
+      bottom: 30px;
+      width: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    
+    .axis-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">L</div>
+        <div class="header-text">
+          <h1>Progress Dashboard</h1>
+          <p>Track your learning journey with LumeX</p>
+        </div>
+      </div>
+      <div class="countdown">
+        <p>Final Exam Countdown</p>
+        <h2>18 Days Left</h2>
+      </div>
+    </div>
+    
+    <!-- Stats Grid -->
+    <div class="grid">
+      <!-- Questions Solved -->
+      <div class="grid-item progress-container">
+        <div class="progress-title">
+          <span>Questions Solved</span>
+          <span>78%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 78%"></div>
+        </div>
+        <div class="stat">234 / 300</div>
+        <div class="stat-secondary">+12 questions this week</div>
+      </div>
+      
+      <!-- Average Score -->
+      <div class="grid-item progress-container">
+        <div class="progress-title">
+          <span>Average Score</span>
+          <span>85%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 85%"></div>
+        </div>
+        <div class="stat">85%</div>
+        <div class="stat-secondary">+3% from last month</div>
+      </div>
+      
+      <!-- Completion Rate -->
+      <div class="grid-item progress-container">
+        <div class="progress-title">
+          <span>Practice Test Completion</span>
+          <span>67%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 67%"></div>
+        </div>
+        <div class="stat">8 / 12</div>
+        <div class="stat-secondary">2 tests completed this week</div>
+      </div>
+      
+      <!-- Score Trend Chart -->
+      <div class="grid-item full-width">
+        <h3 class="progress-title">Score Improvement Trend</h3>
+        <div class="chart-container">
+          <!-- Line Chart -->
+          <div class="line-chart">
+            <svg width="100%" height="100%">
+              <defs>
+                <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--primary)" />
+                  <stop offset="100%" stop-color="var(--secondary)" />
+                </linearGradient>
+              </defs>
+              
+              <!-- Grid lines -->
+              <line x1="40" y1="20" x2="40" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="121.4" y1="20" x2="121.4" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="202.8" y1="20" x2="202.8" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="284.2" y1="20" x2="284.2" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="365.6" y1="20" x2="365.6" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="447" y1="20" x2="447" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="528.4" y1="20" x2="528.4" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="610" y1="20" x2="610" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              
+              <line x1="40" y1="20" x2="610" y2="20" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="40" y1="65" x2="610" y2="65" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="40" y1="110" x2="610" y2="110" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="40" y1="155" x2="610" y2="155" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              <line x1="40" y1="200" x2="610" y2="200" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+              
+              <!-- Line path -->
+              <path 
+                d="M40,120 L121.4,108 L202.8,114 L284.2,82 L365.6,78 L447,73 L528.4,58 L610,46" 
+                class="line" />
+              
+              <!-- Data points -->
+              <circle cx="40" cy="120" r="6" class="data-point" />
+              <circle cx="121.4" cy="108" r="6" class="data-point" />
+              <circle cx="202.8" cy="114" r="6" class="data-point" />
+              <circle cx="284.2" cy="82" r="6" class="data-point" />
+              <circle cx="365.6" cy="78" r="6" class="data-point" />
+              <circle cx="447" cy="73" r="6" class="data-point" />
+              <circle cx="528.4" cy="58" r="6" class="data-point" />
+              <circle cx="610" cy="46" r="6" class="data-point" />
+            </svg>
+            
+            <!-- X axis labels -->
+            <div class="x-axis">
+              <div class="axis-label">Test 1</div>
+              <div class="axis-label">Test 2</div>
+              <div class="axis-label">Test 3</div>
+              <div class="axis-label">Test 4</div>
+              <div class="axis-label">Test 5</div>
+              <div class="axis-label">Test 6</div>
+              <div class="axis-label">Test 7</div>
+              <div class="axis-label">Test 8</div>
+            </div>
+            
+            <!-- Y axis labels -->
+            <div class="y-axis">
+              <div class="axis-label">95%</div>
+              <div class="axis-label">90%</div>
+              <div class="axis-label">85%</div>
+              <div class="axis-label">80%</div>
+              <div class="axis-label">75%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Strengths -->
+      <div class="grid-item">
+        <h3 class="progress-title">Your Strengths</h3>
+        <div class="circle-chart">
+          <svg width="180" height="180" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="var(--primary)" />
+                <stop offset="100%" stop-color="var(--secondary)" />
+              </linearGradient>
+            </defs>
+            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+            <circle class="circle" cx="50" cy="50" r="45" stroke-dashoffset="56.6"></circle>
+          </svg>
+          <div class="percentage">80%</div>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>Problem Solving</td>
+              <td class="score score-positive">92%</td>
+            </tr>
+            <tr>
+              <td>Theory Questions</td>
+              <td class="score score-positive">88%</td>
+            </tr>
+            <tr>
+              <td>Practical Applications</td>
+              <td class="score score-positive">85%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Areas for Improvement -->
+      <div class="grid-item">
+        <h3 class="progress-title">Areas for Improvement</h3>
+        <div class="circle-chart">
+          <svg width="180" height="180" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+            <circle class="circle" cx="50" cy="50" r="45" stroke-dashoffset="141.5"></circle>
+          </svg>
+          <div class="percentage">50%</div>
+        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>Advanced Concepts</td>
+              <td class="score score-warning">65%</td>
+            </tr>
+            <tr>
+              <td>Time Management</td>
+              <td class="score score-warning">70%</td>
+            </tr>
+            <tr>
+              <td>Edge Cases</td>
+              <td class="score score-warning">68%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Recent Tests -->
+      <div class="grid-item">
+        <h3 class="progress-title">Recent Practice Tests</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Test</th>
+              <th>Date</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Test 8</td>
+              <td>Mar 28, 2025</td>
+              <td class="score score-positive">89%</td>
+            </tr>
+            <tr>
+              <td>Test 7</td>
+              <td>Mar 24, 2025</td>
+              <td class="score score-positive">87%</td>
+            </tr>
+            <tr>
+              <td>Test 6</td>
+              <td>Mar 19, 2025</td>
+              <td class="score score-positive">84%</td>
+            </tr>
+            <tr>
+              <td>Test 5</td>
+              <td>Mar 15, 2025</td>
+              <td class="score score-positive">83%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Recommendations Section -->
+    <div class="recommendations">
+      <h3 class="recommendation-title">Recommended Next Steps</h3>
+      <ul class="recommendation-list">
+        <li class="recommendation-item">
+          <div class="recommendation-icon">📊</div>
+          <div class="recommendation-content">
+            <h4>Take Practice Test 9</h4>
+            <p>Focus on Advanced Concepts to improve your weakest area</p>
+          </div>
+          <button class="btn-primary">Start Test</button>
+        </li>
+        <li class="recommendation-item">
+          <div class="recommendation-icon">📝</div>
+          <div class="recommendation-content">
+            <h4>Review Edge Cases Module</h4>
+            <p>This will help boost your performance on complex problems</p>
+          </div>
+          <button class="btn-primary">Review</button>
+        </li>
+        <li class="recommendation-item">
+          <div class="recommendation-icon">⏱️</div>
+          <div class="recommendation-content">
+            <h4>Time Management Workshop</h4>
+            <p>Learn strategies to complete questions more efficiently</p>
+          </div>
+          <button class="btn-primary">Join</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

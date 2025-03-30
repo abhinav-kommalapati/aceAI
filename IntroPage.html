@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LumeX - Intro Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a0933;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #9b30ff;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .try-btn {
+            background-color: #9b30ff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex-grow: 1;
+        }
+
+        .intro-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .intro-subtitle {
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .selection-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .selection-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .grade-selection, .subject-selection {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .option-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .option-card:hover, .option-card.selected {
+            background-color: rgba(155, 48, 255, 0.2);
+            border-color: #9b30ff;
+        }
+
+        .subject-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #9b30ff;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #8529db;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .exam-date {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .exam-date label {
+            opacity: 0.9;
+        }
+
+        .exam-date input {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.75rem;
+            border-radius: 6px;
+            color: white;
+        }
+
+        .syllabus-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .additional-notes {
+            margin-top: 2rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .additional-notes p {
+            opacity: 0.7;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">L</div>
+            <span>LumeX</span>
+        </div>
+        <div class="nav-links">
+            <a href="#">Mission</a>
+            <a href="#">API</a>
+        </div>
+        <button class="try-btn">Try</button>
+    </div>
+
+    <div class="container">
+        <h1 class="intro-title">LumeX Educational Dashboard</h1>
+        <p class="intro-subtitle">Customize your learning experience by selecting your grade and subjects to begin your educational journey.</p>
+
+        <div class="selection-container">
+            <h2 class="selection-title">Study Preferences</h2>
+
+            <div class="grade-selection">
+                <h3 class="section-title">Grade Selection</h3>
+                <div class="options">
+                    <div class="option-card">Class 9</div>
+                    <div class="option-card selected">Class 10</div>
+                    <div class="option-card">Class 11</div>
+                    <div class="option-card">Class 12</div>
+                </div>
+            </div>
+
+            <div class="subject-selection">
+                <h3 class="section-title">Subjects to Cover</h3>
+                <div class="options">
+                    <div class="option-card selected">
+                        <div class="subject-icon">∑</div>
+                        Mathematics
+                    </div>
+                    <div class="option-card">
+                        <div class="subject-icon">⚗️</div>
+                        Science
+                    </div>
+                    <div class="option-card selected">
+                        <div class="subject-icon">📝</div>
+                        English
+                    </div>
+                    <div class="option-card">
+                        <div class="subject-icon">📜</div>
+                        History
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-date">
+                <label for="exam-date">Exam Date</label>
+                <input type="date" id="exam-date">
+                
+                <div class="syllabus-checkbox">
+                    <input type="checkbox" id="syllabus-check" checked>
+                    <label for="syllabus-check">Include full syllabus</label>
+                </div>
+            </div>
+
+            <div class="additional-notes">
+                <p>Create a personalized study plan based on your selections</p>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary">Skip</button>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle selection toggling
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // For grade selection (single select)
+                if (this.parentElement.parentElement.classList.contains('grade-selection')) {
+                    document.querySelectorAll('.grade-selection .option-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                } 
+                // For subject selection (multi-select)
+                else {
+                    this.classList.toggle('selected');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

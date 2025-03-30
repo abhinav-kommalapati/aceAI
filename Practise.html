@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Questions - LumeX</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1654 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: linear-gradient(135deg, #e835a0 0%, #b648e3 100%);
+            border-radius: 0.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.6rem;
+            box-shadow: 0 2px 10px rgba(232, 53, 160, 0.4);
+        }
+        
+        .logo-text {
+            font-weight: bold;
+            font-size: 1.6rem;
+            background: linear-gradient(to right, #e835a0, #b648e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #e835a0, #b648e3);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .try-btn {
+            background: linear-gradient(135deg, #e835a0 0%, #b648e3 100%);
+            border: none;
+            border-radius: 0.4rem;
+            padding: 0.6rem 1.8rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(232, 53, 160, 0.4);
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .try-btn:hover {
+            box-shadow: 0 4px 15px rgba(232, 53, 160, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            background: linear-gradient(135deg, rgba(232, 53, 160, 0.1) 0%, rgba(182, 72, 227, 0.1) 100%);
+            border-radius: 0.8rem;
+            padding: 2.5rem 2rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        
+        .page-title h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #e835a0, #b648e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .page-title p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .syllabus-form {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 0.8rem;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        
+        .form-title {
+            font-size: 1.6rem;
+            margin-bottom: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .input-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: rgba(232, 53, 160, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(232, 53, 160, 0.2);
+        }
+        
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .topics-container {
+            margin-top: 2.5rem;
+        }
+        
+        .topic-card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 0.8rem;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .topic-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(232, 53, 160, 0.1) 0%, rgba(182, 72, 227, 0.1) 100%);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(232, 53, 160, 0.2);
+        }
+        
+        .topic-card:hover::before {
+            opacity: 1;
+        }
+        
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        
+        .topic-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .question-count {
+            background: linear-gradient(135deg, #e835a0 0%, #b648e3 100%);
+            border-radius: 2rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(232, 53, 160, 0.3);
+        }
+        
+        .topic-description {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        
+        .topic-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .topic-actions button {
+            background: linear-gradient(135deg, #e835a0 0%, #b648e3 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(232, 53, 160, 0.3);
+            flex: 1;
+            text-align: center;
+        }
+        
+        .topic-actions button:hover {
+            box-shadow: 0 4px 12px rgba(232, 53, 160, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .topic-actions button:nth-child(2) {
+            background: transparent;
+            border: 1px solid rgba(232, 53, 160, 0.7);
+            box-shadow: none;
+        }
+        
+        .topic-actions button:nth-child(2):hover {
+            background: rgba(232, 53, 160, 0.1);
+            box-shadow: 0 2px 8px rgba(232, 53, 160, 0.2);
+        }
+        
+        .add-topic-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #e835a0 0%, #b648e3 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 1.2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(232, 53, 160, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .add-topic-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .add-topic-btn:hover {
+            box-shadow: 0 6px 20px rgba(232, 53, 160, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .add-topic-btn:hover::before {
+            left: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <div class="logo-icon">L</div>
+            <div class="logo-text">LumeX</div>
+        </div>
+        <div class="nav-links">
+            <a href="#">Mission</a>
+            <a href="#">API</a>
+        </div>
+        <button class="try-btn">Try</button>
+    </header>
+    
+    <div class="container">
+        <div class="page-title">
+            <h1>Practice Questions</h1>
+            <p>Master your skills with targeted practice questions for each topic in your syllabus</p>
+        </div>
+        
+        <div class="syllabus-form">
+            <h2 class="form-title">Add Your Syllabus Topics</h2>
+            <div class="input-group">
+                <label for="topic1">Topic 1</label>
+                <input type="text" id="topic1" placeholder="Enter topic name">
+            </div>
+            <div class="input-group">
+                <label for="topic2">Topic 2</label>
+                <input type="text" id="topic2" placeholder="Enter topic name">
+            </div>
+            <div class="input-group">
+                <label for="topic3">Topic 3</label>
+                <input type="text" id="topic3" placeholder="Enter topic name">
+            </div>
+            
+            <button class="add-topic-btn">Generate Practice Questions</button>
+        </div>
+        
+        <div class="topics-container">
+            <div class="topic-card">
+                <div class="topic-header">
+                    <div class="topic-title">Data Structures</div>
+                    <div class="question-count">20 Questions</div>
+                </div>
+                <div class="topic-description">
+                    Practice questions on arrays, linked lists, stacks, queues, trees, and graphs. Master fundamental concepts through hands-on problem-solving.
+                </div>
+                <div class="topic-actions">
+                    <button>Start Practice</button>
+                    <button>View Details</button>
+                </div>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-header">
+                    <div class="topic-title">Algorithms</div>
+                    <div class="question-count">15 Questions</div>
+                </div>
+                <div class="topic-description">
+                    Test your skills on sorting, searching, dynamic programming, and greedy algorithms. Improve your problem-solving approach with carefully designed exercises.
+                </div>
+                <div class="topic-actions">
+                    <button>Start Practice</button>
+                    <button>View Details</button>
+                </div>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-header">
+                    <div class="topic-title">Database Management</div>
+                    <div class="question-count">12 Questions</div>
+                </div>
+                <div class="topic-description">
+                    Practice SQL queries, normalization, database design, and transaction management. Enhance your database skills with real-world scenarios and challenges.
+                </div>
+                <div class="topic-actions">
+                    <button>Start Practice</button>
+                    <button>View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
