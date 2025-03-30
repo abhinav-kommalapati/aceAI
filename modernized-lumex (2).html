@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LumeX - Test Page</title>
+  <script>
+    // Function to handle question navigation
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all question pages
+  const pages = document.querySelectorAll('.question-page');
+  const totalPages = pages.length;
+  
+  // Select all navigation buttons
+  const prevButtons = document.querySelectorAll('.nav-button.prev');
+  const nextButtons = document.querySelectorAll('.nav-button.next');
+  
+  // Function to show a specific page
+  function showPage(pageIndex) {
+    // Hide all pages
+    pages.forEach(page => {
+      page.classList.remove('active');
+    });
+    
+    // Show the selected page
+    pages[pageIndex - 1].classList.add('active');
+  }
+  
+  // Set up click event for all next buttons
+  nextButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const currentPage = document.querySelector('.question-page.active');
+      const currentPageNum = parseInt(currentPage.getAttribute('data-page'));
+      const nextPageNum = currentPageNum + 1;
+      
+      if (nextPageNum <= totalPages) {
+        showPage(nextPageNum);
+      }
+    });
+  });
+  
+  // Set up click event for all previous buttons
+  prevButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const currentPage = document.querySelector('.question-page.active');
+      const currentPageNum = parseInt(currentPage.getAttribute('data-page'));
+      const prevPageNum = currentPageNum - 1;
+      
+      if (prevPageNum >= 1) {
+        showPage(prevPageNum);
+      }
+    });
+  });
+  
+  // Handle option selection
+  const options = document.querySelectorAll('.option');
+  
+  options.forEach(option => {
+    option.addEventListener('click', function() {
+      // Get all siblings (other options in the same question)
+      const parent = this.closest('.options');
+      const siblings = parent.querySelectorAll('.option');
+      
+      // Remove 'selected' class from all siblings
+      siblings.forEach(sib => {
+        sib.classList.remove('selected');
+      });
+      
+      // Add 'selected' class to the clicked option
+      this.classList.add('selected');
+    });
+  });
+  
+  // Handle submit button
+  const submitButton = document.querySelector('.submit-button');
+  
+  if (submitButton) {
+    submitButton.addEventListener('click', function() {
+      // Collect all selected answers
+      const selectedAnswers = [];
+      pages.forEach((page, index) => {
+        const selected = page.querySelector('.option.selected');
+        selectedAnswers.push({
+          question: index + 1,
+          selected: selected ? Array.from(page.querySelectorAll('.option')).indexOf(selected) + 1 : null
+        });
+      });
+      
+      // You can process the answers here or send them to a server
+      console.log('Submitted answers:', selectedAnswers);
+      alert('Test submitted! Thank you.');
+    });
+  }
+});
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a0933 0%, #2a0b4a 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 9, 51, 0.8);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #b429ff 0%, #8a1fff 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(180, 41, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .logo:hover .logo-icon {
+      box-shadow: 0 8px 20px rgba(180, 41, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(to right, #fff, #b09fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      opacity: 0.8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, #b429ff, #8a1fff);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-links a:hover::after {
+      width: 70%;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .test-container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-container:hover {
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      transform: translateY(-5px);
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .test-name {
+      font-size: 24px;
+      font-weight: 600;
+      background: linear-gradient(to right, #fff, #d4b2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .timer {
+      background: linear-gradient(135deg, rgba(180, 41, 255, 0.2) 0%, rgba(138, 31, 255, 0.2) 100%);
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(180, 41, 255, 0.3);
+      color: #d4b2ff;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(180, 41, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .timer:hover {
+      box-shadow: 0 8px 20px rgba(180, 41, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .question-page {
+      display: none;
+      flex-grow: 1;
+    }
+
+    .question-page.active {
+      display: block;
+    }
+
+    .question {
+      transition: all 0.3s ease;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .question:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .question-number {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(180, 41, 255, 0.3);
+      transform: translateX(5px);
+    }
+
+    .option.selected {
+      background: rgba(180, 41, 255, 0.15);
+      border: 1px solid rgba(180, 41, 255, 0.5);
+      box-shadow: 0 0 15px rgba(180, 41, 255, 0.2);
+    }
+
+    .option-box {
+      min-width: 22px;
+      height: 22px;
+      border: 2px solid transparent;
+      background: linear-gradient(white, white) padding-box,
+                 linear-gradient(135deg, #b429ff, #8a1fff) border-box;
+      border-radius: 6px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .selected .option-box::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #b429ff, #8a1fff);
+      border-radius: 3px;
+    }
+
+    .option:hover .option-box {
+      box-shadow: 0 0 10px rgba(180, 41, 255, 0.5);
+    }
+
+    .option-text {
+      width: 100%;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .option:hover .option-text {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+
+    .nav-button {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .nav-button.prev::before {
+      content: '←';
+    }
+
+    .nav-button.next::after {
+      content: '→';
+    }
+
+    .progress-indicator {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .progress-dot.active {
+      background: linear-gradient(135deg, #b429ff, #8a1fff);
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(180, 41, 255, 0.5);
+    }
+
+    .submit-button {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #b429ff 0%, #8a1fff 100%);
+      border: none;
+      border-radius: 30px;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(180, 41, 255, 0.3);
+      transition: all 0.3s ease;
+      min-width: 200px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(180, 41, 255, 0.5);
+    }
+
+    .submit-button:active {
+      transform: translateY(1px);
+      box-shadow: 0 5px 15px rgba(180, 41, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 15px;
+      }
+      
+      .navbar {
+        padding: 15px 20px;
+      }
+      
+      .question {
+        padding: 15px 10px;
+      }
+      
+      .option {
+        padding: 12px 10px;
+      }
+      
+      .nav-button {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="#" class="logo">
+      <div class="logo-icon">L</div>
+      <div class="logo-text">LumeX</div>
+    </a>
+    <div class="nav-links">
+      <a href="#">Dashboard</a>
+      <a href="#">Analytics</a>
+      <a href="#">Practice</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="test-container">
+      <div class="test-header">
+        <div class="test-name">Test (Name)</div>
+        <div class="timer">10:00</div>
+      </div>
+
+      <!-- Question 1 -->
+      <div class="question-page active" data-page="1">
+        <div class="question">
+          <div class="question-number">Question 1</div>
+          <div class="options">
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="navigation">
+          <button class="nav-button prev" disabled>Previous</button>
+          <button class="nav-button next">Next</button>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question-page" data-page="2">
+        <div class="question">
+          <div class="question-number">Question 2</div>
+          <div class="options">
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="navigation">
+          <button class="nav-button prev">Previous</button>
+          <button class="nav-button next">Next</button>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-page" data-page="3">
+        <div class="question">
+          <div class="question-number">Question 3</div>
+          <div class="options">
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+            <div class="option">
+              <div class="option-box"></div>
+              <div class="option-text"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="navigation">
+          <button class="nav-button prev">Previous</button>
+          <button class="submit-button">Submit</button>
+        </div>
+      </div>
+
+      
